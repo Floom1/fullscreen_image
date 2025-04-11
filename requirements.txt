@@ -1,0 +1,6 @@
+pyqt5
+pillow
+configparser
+pywin32
+pyinstaller
+pysmb
