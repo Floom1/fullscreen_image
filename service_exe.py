@@ -11,15 +11,19 @@ import win32ts
 import win32profile
 import time
 
+
+
 class FullScreenAppService(win32serviceutil.ServiceFramework):
     _svc_name_ = "FullScreenAppService"
     _svc_display_name_ = "Full Screen App Service"
     _svc_description_ = "Service to run the full screen PyQt5 app in user session"
 
+
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
         self.process_handle = None
+
 
     def SvcStop(self):
         self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
@@ -27,6 +31,7 @@ class FullScreenAppService(win32serviceutil.ServiceFramework):
         if self.process_handle:
             win32api.TerminateProcess(self.process_handle, 0)
         win32event.SetEvent(self.hWaitStop)
+
 
     def SvcDoRun(self):
         servicemanager.LogMsg(servicemanager.EVENTLOG_INFORMATION_TYPE,
@@ -37,6 +42,7 @@ class FullScreenAppService(win32serviceutil.ServiceFramework):
         self.main()
         self.ReportServiceStatus(win32service.SERVICE_RUNNING)
         servicemanager.LogInfoMsg("Service is running")
+
 
     def main(self):
         servicemanager.LogInfoMsg("Entering main function")
@@ -92,9 +98,9 @@ class FullScreenAppService(win32serviceutil.ServiceFramework):
             servicemanager.LogErrorMsg(f"Failed to start process: {str(e)}")
             return
 
-        # Ожидаем остановки службы
         servicemanager.LogInfoMsg("Waiting for stop event")
         win32event.WaitForSingleObject(self.hWaitStop, win32event.INFINITE)
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
